@@ -53,11 +53,3 @@ Using the tokens from the previous example `["00000000", "00010001", "00020002",
 ## How to Run
 
 To run this project locally, simply open the `index.html` file in your web browser.
-
-## Future Extensions
-
-In the future, this tokenizer could be extended to handle more complex scenarios, such as:
-
-- Supporting different languages and their specific tokenization rules.
-- Handling of out-of-vocabulary words during the decoding process.
-- Incorporating subword tokenization methods for more efficient vocabulary usage.
