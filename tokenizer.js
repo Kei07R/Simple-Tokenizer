@@ -64,25 +64,62 @@ document.addEventListener("DOMContentLoaded", () => {
   const textInput = document.getElementById("text-input");
   const encodeButton = document.getElementById("encode-button");
   const tokensOutput = document.getElementById("tokens-output");
+  const tokenCount = document.getElementById("token-count");
 
   const tokensInput = document.getElementById("tokens-input");
   const decodeButton = document.getElementById("decode-button");
   const textOutput = document.getElementById("text-output");
 
-  encodeButton.addEventListener("click", () => {
-    const text = textInput.value;
-    if (text) {
-      const encoded = encoder(text);
-      tokensOutput.textContent = encoded.join(", ");
+  const vocabOutput = document.getElementById("vocab-output");
+  const vocabSize = document.getElementById("vocab-size");
+
+  function renderVocabulary() {
+    vocabSize.textContent = `${vocabulary.size} word${vocabulary.size !== 1 ? "s" : ""}`;
+    if (vocabulary.size === 0) {
+      vocabOutput.className = "vocab-empty";
+      vocabOutput.textContent = "Encode some text to populate the vocabulary.";
+      return;
     }
+    vocabOutput.className = "vocab-grid";
+    vocabOutput.innerHTML = "";
+    vocabulary.forEach((id, word) => {
+      const entry = document.createElement("div");
+      entry.className = "vocab-entry";
+      entry.innerHTML = `<span class="vocab-word" title="${word}">${word}</span><span class="vocab-id">#${id}</span>`;
+      vocabOutput.appendChild(entry);
+    });
+  }
+
+  encodeButton.addEventListener("click", () => {
+    const text = textInput.value.trim();
+    if (!text) return;
+    const encoded = encoder(text);
+
+    tokensOutput.className = "output-box monospace token-chips";
+    tokensOutput.innerHTML = "";
+    encoded.forEach((token) => {
+      const chip = document.createElement("span");
+      chip.className = "token-chip";
+      chip.textContent = token;
+      tokensOutput.appendChild(chip);
+    });
+
+    tokenCount.style.display = "inline";
+    tokenCount.textContent = `${encoded.length} token${encoded.length !== 1 ? "s" : ""}`;
+
+    tokensInput.value = encoded.join(", ");
+    renderVocabulary();
   });
 
   decodeButton.addEventListener("click", () => {
-    const tokensStr = tokensInput.value;
-    if (tokensStr) {
-      const tokens = tokensStr.split(",").map((t) => t.trim());
-      const decoded = decoder(tokens);
-      textOutput.textContent = decoded;
-    }
+    const tokensStr = tokensInput.value.trim();
+    if (!tokensStr) return;
+    const tokens = tokensStr.split(",").map((t) => t.trim());
+    const decoded = decoder(tokens);
+
+    textOutput.className = "output-box";
+    textOutput.textContent = decoded;
   });
+
+  renderVocabulary();
 });
