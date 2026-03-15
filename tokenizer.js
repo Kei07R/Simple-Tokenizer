@@ -48,7 +48,7 @@ function decoder(tokens) {
 }
 
 // Example Usage:
-const text = "Hello my name is Kai and I love coding.";
+const text = "Hello my name is Kartikeiya and I love coding.";
 console.log("Original Text:", text);
 
 const encodedTokens = encoder(text);
